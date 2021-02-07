@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="5dp">
+    android:layout_margin="5dp"
+    android:background="#f1f1f1">
 
     <ImageView
         android:id="@+id/ivProfile"
@@ -16,8 +16,10 @@
         android:id="@+id/tvScreenName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:fontFamily="@font/helvetical"
         android:layout_marginStart="5dp"
-        android:layout_toEndOf="@+id/ivProfile"
+        android:layout_toEndOf="@+id/tvUserName"
         tools:text="panda1234" />
 
     <TextView
@@ -26,7 +28,39 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvScreenName"
         android:layout_marginStart="5dp"
+        android:layout_marginTop="3dp"
+        android:layout_toEndOf="@+id/ivProfile"
+        android:fontFamily="@font/helvetical"
+        tools:text="This is my tweet!" />
+
+    <TextView
+        android:id="@+id/tvUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="5dp"
         android:layout_marginTop="2dp"
         android:layout_toEndOf="@+id/ivProfile"
-        tools:text="This is my tweet!" />
+        android:fontFamily="@font/helvetical_bold"
+        android:textStyle="bold"
+        tools:text='"@panda"' />
+
+    <TextView
+        android:id="@+id/tvTimeStamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:fontFamily="@font/helvetical"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="5dp"
+        tools:text="4 hour ago" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/light_gray"
+        android:layout_below="@id/tvBody"
+        android:layout_marginTop="10dp"/>
+
 </RelativeLayout>

@@ -1,13 +1,13 @@
 package com.codepath.apps.restclienttemplate;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.LinearLayout;
 
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
@@ -30,14 +30,16 @@ public class TimelineActivity extends AppCompatActivity {
     TweetsAdapter tweetsAdapter;
     SwipeRefreshLayout swipeRefreshLayout;
     EndlessRecyclerViewScrollListener scrollListener;
+    Toolbar myToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
 
-        client = TwitterApp.getRestClient(this);
+        myToolbar = findViewById(R.id.myToolbar);
 
+        client = TwitterApp.getRestClient(this);
 
         swipeRefreshLayout = findViewById(R.id.swipeContainer);
         swipeRefreshLayout.setColorSchemeColors(
@@ -54,6 +56,7 @@ public class TimelineActivity extends AppCompatActivity {
             }
         });
 
+        setSupportActionBar(myToolbar);
         //find rv
         rvTweets = findViewById(R.id.rvTweets);
         //initialize the list of tweets and adapters
