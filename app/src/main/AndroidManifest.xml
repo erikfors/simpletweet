@@ -10,8 +10,10 @@
         android:icon="@mipmap/ic_launcher_twitter"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
-        <activity android:name=".TimelineActivity"
-            android:label=""></activity>
+        <activity android:name=".ComposeActivity"></activity>
+        <activity
+            android:name=".TimelineActivity"
+            android:label="" />
         <activity
             android:name=".LoginActivity"
             android:label="@string/app_name"
@@ -33,8 +35,8 @@
             </intent-filter>
         </activity>
     </application>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
 </manifest>
