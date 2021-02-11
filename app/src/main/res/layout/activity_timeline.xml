@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TimelineActivity"
+    tools:context=".LoginActivity$TimelineActivity"
     android:background="#f1f1f1">
 
     <androidx.appcompat.widget.Toolbar
@@ -33,4 +33,16 @@
         android:layout_height="match_parent" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fbCompose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/twitter_blue"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/vector_compose_fab"
+        android:layout_alignParentBottom="true" />
+
+
 </RelativeLayout>

@@ -12,10 +12,10 @@
         android:theme="@style/AppTheme">
         <activity android:name=".ComposeActivity"></activity>
         <activity
-            android:name=".TimelineActivity"
+            android:name=".LoginActivity"
             android:label="" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".TimelineActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme">
             <intent-filter>

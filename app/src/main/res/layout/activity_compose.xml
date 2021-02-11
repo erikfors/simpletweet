@@ -6,6 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".ComposeActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/myToolbarEdit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/twitter_blue"
+        >
+        <ImageView
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@drawable/twitter_logo_white"/>
+    </androidx.appcompat.widget.Toolbar>
+
     <EditText
         android:id="@+id/etCompose"
         android:layout_width="match_parent"
@@ -15,18 +27,42 @@
         android:layout_marginEnd="5dp"
         android:layout_marginBottom="5dp"
         android:ems="10"
+        android:layout_below="@+id/myToolbarEdit"
         android:gravity="start|top"
         android:hint="What's happening?"
+        android:fontFamily="@font/helvetical"
         android:inputType="textMultiLine"
         android:minLines="5" />
 
-    <Button
-        android:id="@+id/btnTweet"
+    <TextView
+        android:id="@+id/tvCounter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etCompose"
+        android:layout_marginTop="5dp"
+        android:layout_toStartOf="@+id/maxCount"
+        android:text="0" />
+
+    <TextView
+        android:id="@+id/maxCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/etCompose"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="5dp"
-        android:text="Tweet" />
+        android:text="/140" />
+
+    <Button
+        android:id="@+id/btnTweet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvCounter"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:background="@color/twitter_blue"
+        android:fontFamily="@font/helvetical"
+        android:text="Tweet"
+        android:textColor="@android:color/white" />
 </RelativeLayout>

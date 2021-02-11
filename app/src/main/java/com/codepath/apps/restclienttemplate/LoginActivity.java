@@ -5,18 +5,40 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.codepath.apps.restclienttemplate.models.SampleModel;
 import com.codepath.apps.restclienttemplate.models.SampleModelDao;
+import com.codepath.apps.restclienttemplate.models.Tweet;
+import com.codepath.apps.restclienttemplate.models.TweetDAO;
+import com.codepath.apps.restclienttemplate.models.TweetWithUser;
+import com.codepath.apps.restclienttemplate.models.User;
+import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.codepath.oauth.OAuthLoginActionBarActivity;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.parceler.Parcels;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import okhttp3.Headers;
 
 public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 
-	private  final String TAG  = "LoginActivity";
+	private final String TAG = "LoginActivity";
 
 	SampleModelDao sampleModelDao;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -47,9 +69,9 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 	// i.e Display application "homepage"
 	@Override
 	public void onLoginSuccess() {
-		Log.i(TAG,"Login was a success!!!!!!!!!!!!!!!");
-		 Intent i = new Intent(this, TimelineActivity.class);
-		 startActivity(i);
+		Log.i(TAG, "Login was a success!!!!!!!!!!!!!!!");
+		Intent i = new Intent(this, TimelineActivity.class);
+		startActivity(i);
 	}
 
 	// OAuth authentication flow failed, handle the error

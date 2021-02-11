@@ -1,5 +1,13 @@
 package com.codepath.apps.restclienttemplate;
 
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -7,19 +15,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.content.Intent;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.os.Parcel;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.apps.restclienttemplate.models.TweetDAO;
 import com.codepath.apps.restclienttemplate.models.TweetWithUser;
 import com.codepath.apps.restclienttemplate.models.User;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,6 +44,7 @@ public class TimelineActivity extends AppCompatActivity {
     EndlessRecyclerViewScrollListener scrollListener;
     Toolbar myToolbar;
     TweetDAO tweetDAO;
+    FloatingActionButton floatingActionButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +52,7 @@ public class TimelineActivity extends AppCompatActivity {
         setContentView(R.layout.activity_timeline);
 
         myToolbar = findViewById(R.id.myToolbar);
+        floatingActionButton = findViewById(R.id.fbCompose);
 
         client = TwitterApp.getRestClient(this);
         tweetDAO = ((TwitterApp) getApplicationContext()).getMyDatabase().tweetDao();
@@ -69,6 +72,13 @@ public class TimelineActivity extends AppCompatActivity {
             }
         });
 
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                composeTweet();
+            }
+        });
+
         setSupportActionBar(myToolbar);
         //find rv
         rvTweets = findViewById(R.id.rvTweets);
@@ -76,7 +86,7 @@ public class TimelineActivity extends AppCompatActivity {
         tweets = new ArrayList<>();
         tweetsAdapter = new TweetsAdapter(this,tweets);
         //config rv
-       LinearLayoutManager linearLayoutManager = (new LinearLayoutManager(this));
+        LinearLayoutManager linearLayoutManager = (new LinearLayoutManager(this));
         rvTweets.setLayoutManager(linearLayoutManager);
         rvTweets.setAdapter(tweetsAdapter);
 
@@ -114,9 +124,7 @@ public class TimelineActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.compose){
-            //compose was tap
-            Intent intent = new Intent(TimelineActivity.this,ComposeActivity.class);
-            startActivityForResult(intent,REQUEST_CODE);
+            composeTweet();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -169,26 +177,26 @@ public class TimelineActivity extends AppCompatActivity {
                 Log.i(TAG,"onSuccess");
 
                 JSONArray jsonArray = json.jsonArray;
-               try {
-                   final List<Tweet> tweetsFromNetwork = Tweet.fromJsonArray(jsonArray);
-                   tweetsAdapter.clear();
-                   tweetsAdapter.addAll(tweetsFromNetwork);
-                   swipeRefreshLayout.setRefreshing(false);
+                try {
+                    final List<Tweet> tweetsFromNetwork = Tweet.fromJsonArray(jsonArray);
+                    tweetsAdapter.clear();
+                    tweetsAdapter.addAll(tweetsFromNetwork);
+                    swipeRefreshLayout.setRefreshing(false);
 
-                   AsyncTask.execute(new Runnable() {
-                       @Override
-                       public void run() {
-                           Log.i(TAG,"Saving recent tweets into DB");
-                           //insert user first
-                           List<User> usersFromNetwork = User.fromTweetsArray(tweetsFromNetwork);
-                           tweetDAO.insertModel(usersFromNetwork.toArray(new User[0]));
-                           //then insert tweet
-                           tweetDAO.insertModel(tweetsFromNetwork.toArray(new Tweet[0]));
-                       }
-                   });
+                    AsyncTask.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            Log.i(TAG,"Saving recent tweets into DB");
+                            //insert user first
+                            List<User> usersFromNetwork = User.fromTweetsArray(tweetsFromNetwork);
+                            tweetDAO.insertModel(usersFromNetwork.toArray(new User[0]));
+                            //then insert tweet
+                            tweetDAO.insertModel(tweetsFromNetwork.toArray(new Tweet[0]));
+                        }
+                    });
 
                 } catch (JSONException e) {
-                   Log.e(TAG,"Json exception", e);
+                    Log.e(TAG,"Json exception", e);
                     e.printStackTrace();
                 }
 
@@ -201,4 +209,11 @@ public class TimelineActivity extends AppCompatActivity {
             }
         });
     }
+
+    public void composeTweet(){
+        //compose was tap
+        Intent intent = new Intent(TimelineActivity.this, ComposeActivity.class);
+        startActivityForResult(intent,REQUEST_CODE);
+    }
 }
+

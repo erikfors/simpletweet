@@ -3,11 +3,15 @@ package com.codepath.apps.restclienttemplate;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.codepath.apps.restclienttemplate.models.Tweet;
@@ -25,6 +29,7 @@ public class ComposeActivity extends AppCompatActivity {
 
     EditText etCompose;
     Button btnTweet;
+    TextView tvCounter;
 
     TwitterClient client;
 
@@ -37,6 +42,7 @@ public class ComposeActivity extends AppCompatActivity {
 
         etCompose = findViewById(R.id.etCompose);
         btnTweet = findViewById(R.id.btnTweet);
+        tvCounter = findViewById(R.id.tvCounter);
 
         btnTweet.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,6 +79,34 @@ public class ComposeActivity extends AppCompatActivity {
                         Log.e(TAG,"onFailure", throwable);
                     }
                 });
+            }
+        });
+
+        etCompose.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                int counter = etCompose.length();
+                final int TEXT_COUNT = 140;
+
+                if(counter <= TEXT_COUNT) {
+                    tvCounter.setText(Integer.toString(counter));
+                    tvCounter.setTextColor(getResources().getColor(R.color.is_black));
+                    btnTweet.setEnabled(true);
+                    btnTweet.setBackgroundColor(getResources().getColor(R.color.twitter_blue));
+                }
+                else{
+                    tvCounter.setText("-" + (counter - TEXT_COUNT));
+                    tvCounter.setTextColor(getResources().getColor(R.color.medium_red));
+                    btnTweet.setEnabled(false);
+                    btnTweet.setBackgroundColor(getResources().getColor(R.color.twitter_blue_30));
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
             }
         });
     }
