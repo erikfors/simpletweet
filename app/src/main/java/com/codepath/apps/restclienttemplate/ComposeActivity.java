@@ -1,10 +1,14 @@
 package com.codepath.apps.restclienttemplate;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -30,6 +34,8 @@ public class ComposeActivity extends AppCompatActivity {
     EditText etCompose;
     Button btnTweet;
     TextView tvCounter;
+    Boolean isSaved = false;
+    String tweetBody;
 
     TwitterClient client;
 
@@ -38,16 +44,29 @@ public class ComposeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_compose);
 
+      tweetBody = "";
+
+        SharedPreferences pref =
+                PreferenceManager.getDefaultSharedPreferences(this);
+       isSaved = pref.getBoolean("isSaved",false );
+
+       if(isSaved)
+           tweetBody = pref.getString("text", "");
+
+
         client = TwitterApp.getRestClient(this);
 
         etCompose = findViewById(R.id.etCompose);
         btnTweet = findViewById(R.id.btnTweet);
         tvCounter = findViewById(R.id.tvCounter);
 
+        etCompose.setText(tweetBody);
+        etCompose.requestFocus();
+
         btnTweet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String tweetBody = etCompose.getText().toString();
+                tweetBody = etCompose.getText().toString();
                 if(tweetBody.isEmpty()){
                     Toast.makeText(ComposeActivity.this,"Sorry, your text can not be empty", Toast.LENGTH_SHORT).show();
                     return;
@@ -67,6 +86,12 @@ public class ComposeActivity extends AppCompatActivity {
                             Intent intent = new Intent();
                             intent.putExtra("tweet", Parcels.wrap(tweet) );
                             setResult(RESULT_OK, intent);
+                            //set save preference save to false
+                            SharedPreferences pref =
+                                    PreferenceManager.getDefaultSharedPreferences(ComposeActivity.this);
+                            SharedPreferences.Editor edit = pref.edit();
+                            edit.putBoolean("isSaved", false);
+                            edit.apply();
                             finish();
                         }catch (JSONException e){
                             e.printStackTrace();
@@ -109,5 +134,74 @@ public class ComposeActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        // Create the object of
+        // AlertDialog Builder class
+        AlertDialog.Builder builder
+                = new AlertDialog
+                .Builder(ComposeActivity.this);
+        // Set the message show for the Alert time
+        builder.setMessage("Do you want to save your tweet as a draft ?");
+        // Set Alert Title
+        builder.setTitle("Alert !");
+        // Set the positive button with yes name
+        // OnClickListener method is use of
+        // DialogInterface interface.
+        builder
+                .setPositiveButton(
+                        "Yes",
+                        new DialogInterface
+                                .OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                                int which)
+                            {
+
+                                //save the user tweet into share preference
+                                SharedPreferences pref =
+                                        PreferenceManager.getDefaultSharedPreferences(ComposeActivity.this);
+                                SharedPreferences.Editor edit = pref.edit();
+                                edit.putString("text", etCompose.getText().toString());
+                                //set change preference is saved to true
+                                edit.putBoolean("isSaved", true);
+                                edit.apply();
+                                //leave activity
+                                finish();
+                            }
+                        });
+        // Set the Negative button with No name
+        // OnClickListener method is use
+        // of DialogInterface interface.
+        builder
+                .setNegativeButton(
+                        "No",
+                        new DialogInterface
+                                .OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                                int which)
+                            {
+                               //set save preference save to false
+                                SharedPreferences pref =
+                                        PreferenceManager.getDefaultSharedPreferences(ComposeActivity.this);
+                                SharedPreferences.Editor edit = pref.edit();
+                                edit.putBoolean("isSaved", false);
+                                edit.apply();
+                                //leave activity
+                                finish();
+                            }
+                        });
+
+        // Create the Alert dialog
+        AlertDialog alertDialog = builder.create();
+        // Show the Alert Dialog box
+        alertDialog.show();
+
     }
 }
